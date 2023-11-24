@@ -15,7 +15,7 @@ services:
   nginx:
     image: nginx:latest
     ports:
-      - 88:80
+      - 8088:80
     links:
       - 'php'
     volumes:
