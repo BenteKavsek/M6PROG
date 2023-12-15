@@ -5,9 +5,9 @@ require_once SOURCE_ROOT . 'database.php';
 
 $connection = database_connect();
 
-$plaats = $_GET ['plaats'];
+$plaats = $_GET['plaats'];
 
-$sql = 'SELECT * FROM weersomstandighedenPerDag WHERE Plaats=? ORDER BY Datum'; 
+$sql = 'SELECT * FROM weersomstandighedenPerDag WHERE plaats=? ORDER BY Datum'; 
 
 $stmt = $connection->prepare($sql);
 
@@ -17,14 +17,15 @@ $stmt->execute();
 
 $result = $stmt->get_result();
 
-while ( $weersomstandigheden = mysqli_fetch_assoc($result)){
+while ($weersomstandigheden = mysqli_fetch_assoc($result)){
     echo '<pre>';
     var_dump( $_GET );
     echo '</pre>';
+    echo '<p> Stad: ' . $weersomstandigheden['plaats'] . '</p>';
+    echo '<p> Datum: ' . $weersomstandigheden['datum'] . '</p>';
+    echo '<p> Aantal graden: ' . $weersomstandigheden['aantalGraden'] . '</p>';
+    echo '<p> Windkracht: ' . $weersomstandigheden['windKracht'] . '</p>';
+    echo '<p> Regen in milimeters: ' . $weersomstandigheden['regenInMilimeters'] . '</p>';
 };
-
-var_dump( $weersomstandigheden );
-
-
 
 ?>
