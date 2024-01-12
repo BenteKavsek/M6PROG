@@ -2,12 +2,12 @@
 
 include_once("../source/database.php");
 
-$searchInput = isset($_GET['searchPersoon']) ? $_GET['searchPersoon'] : '';
-
+$searchInput = $_GET['search'];
 $conn = database_connect();
-$searchResults = findPersoon($conn,$searchInput);
+$searchResults = findPersoon($conn, $searchInput);
 $conn->close();
 
+header('Content-Type: application/json; charset=utf8');
 echo json_encode($searchResults);
 
 function getQueryResultsAssoc($result)
@@ -26,7 +26,7 @@ function getQueryResultsAssoc($result)
     return $results;
 }
 
-function findPersoon($conn,$name)
+function findPersoon($conn,$searchInput)
 {
     if($conn)
     {
@@ -34,7 +34,7 @@ function findPersoon($conn,$name)
         {
             $q = "select * from naw where naam = ?;";
             $stmt = $conn->prepare($q);
-            $stmt->bind_param("s",$name);
+            $stmt->bind_param("s",$searchInput);
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -48,4 +48,3 @@ function findPersoon($conn,$name)
     }
     return [];
 }
- 
