@@ -5,9 +5,10 @@ require_once SOURCE_ROOT . 'database.php';
 
 $connection = database_connect();
 
-$plaats = 'amsterdam';
+$plaats =  $_GET['zoeken'] . '%';
 
-$sql = 'SELECT * FROM weersomstandighedenPerDag WHERE Plaats=? ORDER BY Datum'; 
+$sql = 'SELECT * FROM weersomstandighedenPerDag WHERE Plaats LIKE ? ORDER BY Datum';
+
 
 $stmt = $connection->prepare($sql);
 
