@@ -1,4 +1,4 @@
-
+let errorMelding = document.getElementById("error");
 
 function addperson(e) {
     e.preventDefault();
@@ -15,12 +15,18 @@ function addperson(e) {
         body: JSON.stringify(jsonForm)
     }
 
-    fetch("nawOpslaan.php", options)
-        .then(async (response) => {
-            console.log(response);
-            let json = await response.json();
-            console.log(json);
-        });
+    fetch("nawopslaan.php", options)
+    .then(response => response.json())
+    .then(data => {
+        if (false === data.success) {
+            alert('niet goed');
+            errorMelding.textContent = data.error;
+            return false;
+        } 
+        console.log( 'Je data is toegevoegd met id:' + data.id );
+    })
+    .catch(error => console.error(error));
+    
 }
 
 let nawForm = document.getElementById("nawForm");
