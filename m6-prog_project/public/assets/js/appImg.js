@@ -24,7 +24,7 @@ function uploadFormFile(){
         body: new FormData(form)
     }
 
-    
+
     fetch("imageRecieve.php", options)
     .then(response => response.json())
     .then(data => {
@@ -37,3 +37,4 @@ function uploadFormFile(){
     })
     .catch(error => console.error(error));
 }
+

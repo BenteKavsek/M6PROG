@@ -3,18 +3,14 @@
 require_once("../source/database.php");
 require_once("../source/config.php");
 
-function handleFile($file){
-    $connectie = database_connect();
-    $link = uniqid();
+$connectie = database_connect();
+
+function handleFile($file, $link){
     $location = $file['tmp_name'];
     $ext = ".png";
-    $filename = "../uploads/$link$ext";
-    move_uploaded_file($location, $filename);
-    return $link;
 }
 
-function insertImageInDb($type, $filename, $link){
-    $connectie = database_connect();
+function insertImageInDb($connectie, $type, $filename, $link){
     $stmt = $connectie->prepare("INSERT INTO imageTable (`type`, `fileNaam`, `fileLink`) VALUES(?, ?, ?);");
     $stmt->bind_param("sss", $type, $filename, $link);
     $result = $stmt->execute();
@@ -22,21 +18,35 @@ function insertImageInDb($type, $filename, $link){
     return $result;
 }
 
-$response = ["succeeded" => false, "message" => ""];
+$response = [   "succeeded" => false,
+                "message" => "",
+                "downloadlink" => null];
 
-$file = $_FILES["image"];
-if($file["error"] == 0)
-{
-    $link = handleFile($file);
-    $result = insertImageInDb($file['type'], $file['tmp_name'], $link);
-    if($result) {
-        $response["succeeded"] = true;
-    } else {
-        $response["message"] = "Error inserting image into database.";
+$file = $_FILES["image" ];
+if($file["error"] == 0 ){
+
+    $link = uniqid();
+    $response["succeeded"] = handleFile($file,  $link);
+    $result = insertImageInDb($connectie, $file['type'], $file['tmp_name'], $link);
+    $downloadLink =  createLink($link);
+        if($result) {
+            $response["succeeded"] = true;
+            $response["downloadlink"] = $downloadLink;
+    
+        }
+
+        else{
+            $response["message"] = "Error inserting image into database.";
+        }
     }
-}
+
 else{
     $response["message"] = "Error during upload: " . $file["error"];
+}
+
+function createLink($fileid){
+    $link = $_SERVER['HTTP_HOST']. "/imagedownload.php?link=$fileid";
+    return $link;
 }
 
 header('Content-Type: application/json; charset=utf-8');
