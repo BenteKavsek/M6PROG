@@ -1,6 +1,6 @@
 use M6prog;
 
-insert into imageTable (`type`, `fileNaam`, `fileLink`);
+insert into imageTable (`type`, `fileNaam`, `fileLink`)
 values
 ("image/png", "uploads/voorbeeld.png", "B7vecnw9G"),
 ("image/png", "uploads/voorbeeld2.png","ND82n9anH"),
