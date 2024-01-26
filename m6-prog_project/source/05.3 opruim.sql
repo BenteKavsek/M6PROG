@@ -1,0 +1,1 @@
+delete from imageTable WHERE uploadDateTime < DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY);
